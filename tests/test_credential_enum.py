@@ -458,7 +458,9 @@ class TestReporter:
         # Wrong key XORs with a different key stream — output is garbled
         wrong = deobfuscate(blob, "wrong-key")
         assert wrong != original
-        assert len(wrong) == len(original)
+        # Note: byte-level XOR with wrong key may produce multi-byte UTF-8
+        # sequences, so character count isn't guaranteed to match — only
+        # confirm the content is different (garbage).
 
     def test_obfuscate_is_base64(self):
         import base64
